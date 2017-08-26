@@ -4,8 +4,15 @@
 - About: https://en.wikipedia.org/wiki/Binary_search_algorithm
 */
 
+const blue: string = '#0af'
+const orange: string = '#fa0'
+const red: string = '#f00'
+const green: string = '#af0'
+
 const output: HTMLElement = document.getElementById('output')!
 const input: HTMLElement = document.getElementById('input')!
+const ologn: HTMLElement = document.getElementById('ologn')!
+const nochop: HTMLElement = document.getElementById('nochop')!
 
 const styleCell = (elem: HTMLElement): void => {
 	elem.style.border = '1px solid black'
@@ -14,10 +21,6 @@ const styleCell = (elem: HTMLElement): void => {
 	elem.style.fontSize = '12px'
 	elem.style.textAlign = 'center'
 	elem.style.display = 'inline-block'
-}
-
-const styleBlue = (elem: HTMLElement): void => {
-	elem.style.backgroundColor = '#0af'
 }
 
 const styleColor = (elem: HTMLElement, color: string): void => {
@@ -31,7 +34,7 @@ const styleLegend = (elem: HTMLElement): void => {
 	elem.style.fontSize = '12px'
 	elem.style.textAlign = 'center'
 	elem.style.display = 'inline-block'
-	elem.style.backgroundColor = '#fa0'
+	elem.style.backgroundColor = orange
 }
 
 const displayLegend = (ary: number[]): void => {
@@ -57,11 +60,7 @@ const displayArray = (ary: number[], start: number, end: number, color: string):
 		styleCell(cell)
 
 		if (i >= start && i <= end) {
-			styleBlue(cell)
-
-			if (color) {
-				styleColor(cell, color)
-			}
+			styleColor(cell, color)
 		}
 
 		row.appendChild(cell)
@@ -73,40 +72,52 @@ const displayArray = (ary: number[], start: number, end: number, color: string):
 let iterCount:number
 let maxIterations: number
 
+enum FailExits {
+	ologn,
+	nochop
+}
+let exit = FailExits.ologn
+
 const compare = (target: number, ary: number[], start: number, end: number): number[] | number | boolean => {
+	// Change the index rather than chop the array
 	const range = end - start
 	const midPoint = start + (range / 2)
 	const midIndex = Math.floor(midPoint)
 	const midValue = ary[midIndex]
 
-	if (iterCount > maxIterations) {
+	// Fail Exit Strategy 1: Max iterations is set to O(log(n))
+	if (iterCount > maxIterations && exit === FailExits.ologn) {
+		console.log('Exited at O(log(n)')
+		displayArray(ary, midIndex, end, red)
 		return false
 	}
 	iterCount += 1
 
+	// Found index when mid = target
 	if (midValue === target) {
-		console.log('Found Index for Target!')
-		displayArray(ary, midIndex, midIndex, '#af0')
+		displayArray(ary, midIndex, midIndex, green)
 		return midIndex
 	}
 
-	if (start === midIndex) {
-		displayArray(ary, midIndex, midIndex, '#F00')
+	// Fail Exit Strategy 2: startIndex = midIndex
+	if (start === midIndex && exit === FailExits.nochop) {
+		console.log('Exited at no-chop')
+		displayArray(ary, midIndex, end, red)
 		return false
 	}
 
+	// Chop Left
 	if (target < midValue) {
-		console.log(`Chop Left: ${start}, ${end}`)
 		start = start
 		end = midIndex
 	}
 
+	// Chop Right
 	if (target > midValue) {
-		console.log(`Chop Right: ${start}, ${end}`)
 		start = midIndex
 	}
 
-	displayArray(ary, start, end)
+	displayArray(ary, start, end, blue)
 
 	return compare(target, ary, start, end)
 }
@@ -119,7 +130,7 @@ const search = (target: number, ary: number[]): number | boolean => {
 	const start = 0
 	const end = ary.length
 
-	displayArray(ary, start, end)
+	displayArray(ary, start, end, blue)
 
 	const foundIndex = compare(target, ary, start, end)
 
@@ -139,7 +150,14 @@ let legendAry: number[] = [
 	0, 1, 2, 3, 4, 5,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
 ]
 
+let target: number = 11
+
 const setTarget = (target: number): void => {
+	target = target
+}
+
+const start = (): void => {
+	output.innerHTML = ''
 	displayLegend(legendAry)
 
 	const foundIndex = search(target, myAry)
@@ -155,6 +173,20 @@ input.addEventListener('change', (event: Event): void => {
 	const newTargetValue: number = Number(event.target['value'])
 	console.log(`New target value: ${newTargetValue}`)
 	setTarget(newTargetValue)
+	start()
 })
 
-setTarget(7)
+ologn.addEventListener('click', (event: Event): void => {
+	const checked: boolean = event.target['checked']
+	exit = FailExits.ologn
+	start()
+
+})
+
+nochop.addEventListener('click', (event: Event): void => {
+	const checked: boolean = event.target['checked']
+	exit = FailExits.nochop
+	start()
+})
+
+start()

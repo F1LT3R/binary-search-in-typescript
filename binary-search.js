@@ -3,8 +3,14 @@
 - Alistair MacDonald
 - About: https://en.wikipedia.org/wiki/Binary_search_algorithm
 */
+var blue = '#0af';
+var orange = '#fa0';
+var red = '#f00';
+var green = '#af0';
 var output = document.getElementById('output');
 var input = document.getElementById('input');
+var ologn = document.getElementById('ologn');
+var nochop = document.getElementById('nochop');
 var styleCell = function (elem) {
     elem.style.border = '1px solid black';
     elem.style.width = '20px';
@@ -12,9 +18,6 @@ var styleCell = function (elem) {
     elem.style.fontSize = '12px';
     elem.style.textAlign = 'center';
     elem.style.display = 'inline-block';
-};
-var styleBlue = function (elem) {
-    elem.style.backgroundColor = '#0af';
 };
 var styleColor = function (elem, color) {
     elem.style.backgroundColor = color;
@@ -26,7 +29,7 @@ var styleLegend = function (elem) {
     elem.style.fontSize = '12px';
     elem.style.textAlign = 'center';
     elem.style.display = 'inline-block';
-    elem.style.backgroundColor = '#fa0';
+    elem.style.backgroundColor = orange;
 };
 var displayLegend = function (ary) {
     var row = document.createElement('div');
@@ -45,10 +48,7 @@ var displayArray = function (ary, start, end, color) {
         cell.innerHTML = String(ary[i]);
         styleCell(cell);
         if (i >= start && i <= end) {
-            styleBlue(cell);
-            if (color) {
-                styleColor(cell, color);
-            }
+            styleColor(cell, color);
         }
         row.appendChild(cell);
     }
@@ -56,34 +56,46 @@ var displayArray = function (ary, start, end, color) {
 };
 var iterCount;
 var maxIterations;
+var FailExits;
+(function (FailExits) {
+    FailExits[FailExits["ologn"] = 0] = "ologn";
+    FailExits[FailExits["nochop"] = 1] = "nochop";
+})(FailExits || (FailExits = {}));
+var exit = FailExits.ologn;
 var compare = function (target, ary, start, end) {
+    // Change the index rather than chop the array
     var range = end - start;
     var midPoint = start + (range / 2);
     var midIndex = Math.floor(midPoint);
     var midValue = ary[midIndex];
-    if (iterCount > maxIterations) {
+    // Fail Exit Strategy 1: Max iterations is set to O(log(n))
+    if (iterCount > maxIterations && exit === FailExits.ologn) {
+        console.log('Exited at O(log(n)');
+        displayArray(ary, midIndex, end, red);
         return false;
     }
     iterCount += 1;
+    // Found index when mid = target
     if (midValue === target) {
-        console.log('Found Index for Target!');
-        displayArray(ary, midIndex, midIndex, '#af0');
+        displayArray(ary, midIndex, midIndex, green);
         return midIndex;
     }
-    if (start === midIndex) {
-        displayArray(ary, midIndex, midIndex, '#F00');
+    // Fail Exit Strategy 2: startIndex = midIndex
+    if (start === midIndex && exit === FailExits.nochop) {
+        console.log('Exited at no-chop');
+        displayArray(ary, midIndex, end, red);
         return false;
     }
+    // Chop Left
     if (target < midValue) {
-        console.log("Chop Left: " + start + ", " + end);
         start = start;
         end = midIndex;
     }
+    // Chop Right
     if (target > midValue) {
-        console.log("Chop Right: " + start + ", " + end);
         start = midIndex;
     }
-    displayArray(ary, start, end);
+    displayArray(ary, start, end, blue);
     return compare(target, ary, start, end);
 };
 var search = function (target, ary) {
@@ -92,7 +104,7 @@ var search = function (target, ary) {
     iterCount = 0;
     var start = 0;
     var end = ary.length;
-    displayArray(ary, start, end);
+    displayArray(ary, start, end, blue);
     var foundIndex = compare(target, ary, start, end);
     if (typeof foundIndex === 'number') {
         return foundIndex;
@@ -105,7 +117,12 @@ var myAry = [
 var legendAry = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
 ];
+var target = 11;
 var setTarget = function (target) {
+    target = target;
+};
+var start = function () {
+    output.innerHTML = '';
     displayLegend(legendAry);
     var foundIndex = search(target, myAry);
     if (foundIndex) {
@@ -119,6 +136,17 @@ input.addEventListener('change', function (event) {
     var newTargetValue = Number(event.target['value']);
     console.log("New target value: " + newTargetValue);
     setTarget(newTargetValue);
+    start();
 });
-setTarget(7);
+ologn.addEventListener('click', function (event) {
+    var checked = event.target['checked'];
+    exit = FailExits.ologn;
+    start();
+});
+nochop.addEventListener('click', function (event) {
+    var checked = event.target['checked'];
+    exit = FailExits.nochop;
+    start();
+});
+start();
 //# sourceMappingURL=binary-search.js.map
