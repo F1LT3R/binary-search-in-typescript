@@ -5,17 +5,23 @@
 */
 
 const output: HTMLElement = document.getElementById('output')!
+const input: HTMLElement = document.getElementById('input')!
 
 const styleCell = (elem: HTMLElement): void => {
 	elem.style.border = '1px solid black'
 	elem.style.width = '20px'
 	elem.style.height = '20px'
 	elem.style.fontSize = '12px'
+	elem.style.textAlign = 'center'
 	elem.style.display = 'inline-block'
 }
 
 const styleBlue = (elem: HTMLElement): void => {
-	elem.style.backgroundColor = '#0ad'
+	elem.style.backgroundColor = '#0af'
+}
+
+const styleColor = (elem: HTMLElement, color: string): void => {
+	elem.style.backgroundColor = color
 }
 
 const styleLegend = (elem: HTMLElement): void => {
@@ -23,8 +29,9 @@ const styleLegend = (elem: HTMLElement): void => {
 	elem.style.width = '20px'
 	elem.style.height = '20px'
 	elem.style.fontSize = '12px'
+	elem.style.textAlign = 'center'
 	elem.style.display = 'inline-block'
-	elem.style.backgroundColor = '#ad0'
+	elem.style.backgroundColor = '#fa0'
 }
 
 const displayLegend = (ary: number[]): void => {
@@ -40,7 +47,7 @@ const displayLegend = (ary: number[]): void => {
 	output.appendChild(row)
 }
 
-const displayArray = (ary: number[], start: number, end: number): void => {
+const displayArray = (ary: number[], start: number, end: number, color: string): void => {
 	const row: HTMLElement = document.createElement('div')
 
 	for (let i:number = 0; i < ary.length; i += 1) {
@@ -48,8 +55,13 @@ const displayArray = (ary: number[], start: number, end: number): void => {
 		cell.innerHTML = String(ary[i])
 
 		styleCell(cell)
+
 		if (i >= start && i <= end) {
 			styleBlue(cell)
+
+			if (color) {
+				styleColor(cell, color)
+			}
 		}
 
 		row.appendChild(cell)
@@ -58,40 +70,52 @@ const displayArray = (ary: number[], start: number, end: number): void => {
 	output.appendChild(row)
 }
 
+let iterCount:number
+let maxIterations: number
+
 const compare = (target: number, ary: number[], start: number, end: number): number[] | number | boolean => {
 	const range = end - start
 	const midPoint = start + (range / 2)
 	const midIndex = Math.floor(midPoint)
 	const midValue = ary[midIndex]
 
+	if (iterCount > maxIterations) {
+		return false
+	}
+	iterCount += 1
+
 	if (midValue === target) {
-		'Found Index for Target!'
-		displayArray(ary, midIndex, midIndex)
+		console.log('Found Index for Target!')
+		displayArray(ary, midIndex, midIndex, '#af0')
 		return midIndex
 	}
 
+	if (start === midIndex) {
+		displayArray(ary, midIndex, midIndex, '#F00')
+		return false
+	}
+
 	if (target < midValue) {
-		console.log('Chop Left')
+		console.log(`Chop Left: ${start}, ${end}`)
 		start = start
 		end = midIndex
 	}
 
 	if (target > midValue) {
-		console.log('Chop Right')
+		console.log(`Chop Right: ${start}, ${end}`)
 		start = midIndex
 	}
 
 	displayArray(ary, start, end)
 
-	if (ary.length === 1) {
-		console.log('Exhausted Array!')
-		return false
-	}
-
 	return compare(target, ary, start, end)
 }
 
 const search = (target: number, ary: number[]): number | boolean => {
+	maxIterations = Math.ceil(Math['log2'](ary.length)) + 1
+	console.log(`Max itterations: ${maxIterations} (worst cast scenario)`)
+	iterCount = 0
+
 	const start = 0
 	const end = ary.length
 
@@ -103,27 +127,34 @@ const search = (target: number, ary: number[]): number | boolean => {
 		return foundIndex
 	}
 
+
 	return false
 }
 
 let myAry: number[] = [
-	1, 2, 3, 4, 6, 7, 10, 13, 14, 18, 19, 21, 24, 37, 40, 45, 71
+	1, 2, 3, 4, 6, 7, 8, 10, 13, 14, 18, 19, 21, 24, 37, 40, 45, 71
 ]
 
 let legendAry: number[] = [
-	0, 1, 2, 3, 4, 5,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+	0, 1, 2, 3, 4, 5,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
 ]
 
-displayLegend(legendAry)
+const setTarget = (target: number): void => {
+	displayLegend(legendAry)
 
+	const foundIndex = search(target, myAry)
 
-console.log(myAry)
-
-const target = 7
-const foundIndex = search(target, myAry)
-
-if (foundIndex) {
-	console.log(`The target: ${target} was found at index: ${foundIndex}`)
-} else {
-	console.log(`The target: ${target} was not found in this array`)
+	if (foundIndex) {
+		console.log(`The target: ${target} was found at index: ${foundIndex}`)
+	} else {
+		console.log(`The target: ${target} was not found in this array`)
+	}
 }
+
+input.addEventListener('change', (event: Event): void => {
+	const newTargetValue: number = Number(event.target['value'])
+	console.log(`New target value: ${newTargetValue}`)
+	setTarget(newTargetValue)
+})
+
+setTarget(7)
