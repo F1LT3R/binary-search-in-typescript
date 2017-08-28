@@ -12,22 +12,25 @@ var input = document.getElementById('input');
 var ologn = document.getElementById('ologn');
 var nochop = document.getElementById('nochop');
 var styleCell = function (elem) {
-    elem.style.border = '1px solid black';
     elem.style.width = '20px';
     elem.style.height = '20px';
     elem.style.fontSize = '12px';
+    elem.style.borderRadius = '3px';
+    elem.style.margin = '0px 1px';
     elem.style.textAlign = 'center';
     elem.style.display = 'inline-block';
+    elem.style.backgroundColor = '#ccc';
 };
 var styleColor = function (elem, color) {
     elem.style.backgroundColor = color;
 };
 var styleLegend = function (elem) {
-    elem.style.border = '1px solid black';
     elem.style.width = '20px';
     elem.style.height = '20px';
     elem.style.fontSize = '12px';
     elem.style.textAlign = 'center';
+    elem.style.borderRadius = '3px';
+    elem.style.margin = '0px 1px';
     elem.style.display = 'inline-block';
     elem.style.backgroundColor = orange;
 };
@@ -54,14 +57,14 @@ var displayArray = function (ary, start, end, color) {
     }
     output.appendChild(row);
 };
-var iterCount;
-var maxIterations;
 var FailExits;
 (function (FailExits) {
     FailExits[FailExits["ologn"] = 0] = "ologn";
     FailExits[FailExits["nochop"] = 1] = "nochop";
 })(FailExits || (FailExits = {}));
 var exit = FailExits.ologn;
+var iterCount;
+var maxIterations;
 var compare = function (target, ary, start, end) {
     // Change the index rather than chop the array
     var range = end - start;
@@ -118,8 +121,8 @@ var legendAry = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
 ];
 var target = 11;
-var setTarget = function (target) {
-    target = target;
+var setTarget = function (newTarget) {
+    target = newTarget;
 };
 var start = function () {
     output.innerHTML = '';
