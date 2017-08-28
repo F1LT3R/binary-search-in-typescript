@@ -144,11 +144,13 @@ var start = function () {
         log("The target: " + target + " was not found in this array");
     }
 };
-input.addEventListener('click', function (event) {
+var updateTargetValue = function (event) {
     var newTargetValue = Number(event.target['value']);
     setTarget(newTargetValue);
     start();
-});
+};
+input.addEventListener('click', updateTargetValue);
+input.addEventListener('change', updateTargetValue);
 ologn.addEventListener('click', function (event) {
     var checked = event.target['checked'];
     exit = FailExits.ologn;

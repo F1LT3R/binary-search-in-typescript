@@ -181,11 +181,14 @@ const start = (): void => {
     }
 }
 
-input.addEventListener('click', (event: Event): void => {
+const updateTargetValue = (event: Event): void => {
     const newTargetValue: number = Number(event.target['value'])
     setTarget(newTargetValue)
     start()
-})
+}
+
+input.addEventListener('click', updateTargetValue)
+input.addEventListener('change', updateTargetValue)
 
 ologn.addEventListener('click', (event: Event): void => {
     const checked: boolean = event.target['checked']
