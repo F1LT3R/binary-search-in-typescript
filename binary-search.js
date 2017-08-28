@@ -1,16 +1,24 @@
 /*
 # Binary Search Alhorithm - in Typescript
 - Alistair MacDonald
-- About: https://en.wikipedia.org/wiki/Binary_search_algorithm
+- Concept: https://en.wikipedia.org/wiki/Binary_search_algorithm
+- Github: https://github.com/F1LT3R/binary-search-in-typescript
+- Blog: https://f1lt3r.io/binary-search-with-typescript
 */
 var blue = '#0af';
 var orange = '#fa0';
 var red = '#f00';
 var green = '#af0';
-var output = document.getElementById('output');
+var graph = document.getElementById('graph');
 var input = document.getElementById('input');
 var ologn = document.getElementById('ologn');
 var nochop = document.getElementById('nochop');
+var logElem = document.getElementById('log');
+var log = function (text) {
+    var logText = document.createElement('div');
+    logText.innerHTML = text;
+    logElem.appendChild(logText);
+};
 var styleCell = function (elem) {
     elem.style.width = '20px';
     elem.style.height = '20px';
@@ -42,7 +50,7 @@ var displayLegend = function (ary) {
         styleLegend(cell);
         row.appendChild(cell);
     }
-    output.appendChild(row);
+    graph.appendChild(row);
 };
 var displayArray = function (ary, start, end, color) {
     var row = document.createElement('div');
@@ -55,7 +63,7 @@ var displayArray = function (ary, start, end, color) {
         }
         row.appendChild(cell);
     }
-    output.appendChild(row);
+    graph.appendChild(row);
 };
 var FailExits;
 (function (FailExits) {
@@ -73,7 +81,7 @@ var compare = function (target, ary, start, end) {
     var midValue = ary[midIndex];
     // Fail Exit Strategy 1: Max iterations is set to O(log(n))
     if (iterCount > maxIterations && exit === FailExits.ologn) {
-        console.log('Exited at O(log(n)');
+        log("Exited after " + maxIterations + " itterations at O(log(n)");
         displayArray(ary, midIndex, end, red);
         return false;
     }
@@ -85,7 +93,7 @@ var compare = function (target, ary, start, end) {
     }
     // Fail Exit Strategy 2: startIndex = midIndex
     if (start === midIndex && exit === FailExits.nochop) {
-        console.log('Exited at no-chop');
+        log("Exited after " + maxIterations + " itterations at No-Chop");
         displayArray(ary, midIndex, end, red);
         return false;
     }
@@ -103,7 +111,7 @@ var compare = function (target, ary, start, end) {
 };
 var search = function (target, ary) {
     maxIterations = Math.ceil(Math['log2'](ary.length)) + 1;
-    console.log("Max itterations: " + maxIterations + " (worst cast scenario)");
+    log("Max-itterations: " + maxIterations + " (worst cast scenario)");
     iterCount = 0;
     var start = 0;
     var end = ary.length;
@@ -125,19 +133,19 @@ var setTarget = function (newTarget) {
     target = newTarget;
 };
 var start = function () {
-    output.innerHTML = '';
+    graph.innerHTML = '';
+    logElem.innerHTML = '';
     displayLegend(legendAry);
     var foundIndex = search(target, myAry);
     if (foundIndex) {
-        console.log("The target: " + target + " was found at index: " + foundIndex);
+        log("The target: " + target + " was found at index: " + foundIndex);
     }
     else {
-        console.log("The target: " + target + " was not found in this array");
+        log("The target: " + target + " was not found in this array");
     }
 };
-input.addEventListener('change', function (event) {
+input.addEventListener('click', function (event) {
     var newTargetValue = Number(event.target['value']);
-    console.log("New target value: " + newTargetValue);
     setTarget(newTargetValue);
     start();
 });

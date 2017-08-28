@@ -1,7 +1,9 @@
 /*
 # Binary Search Alhorithm - in Typescript
 - Alistair MacDonald
-- About: https://en.wikipedia.org/wiki/Binary_search_algorithm
+- Concept: https://en.wikipedia.org/wiki/Binary_search_algorithm
+- Github: https://github.com/F1LT3R/binary-search-in-typescript
+- Blog: https://f1lt3r.io/binary-search-with-typescript
 */
 
 const blue: string = '#0af'
@@ -9,10 +11,17 @@ const orange: string = '#fa0'
 const red: string = '#f00'
 const green: string = '#af0'
 
-const output: HTMLElement = document.getElementById('output')!
+const graph: HTMLElement = document.getElementById('graph')!
 const input: HTMLElement = document.getElementById('input')!
 const ologn: HTMLElement = document.getElementById('ologn')!
 const nochop: HTMLElement = document.getElementById('nochop')!
+const logElem: HTMLElement = document.getElementById('log')!
+
+const log = (text): void => {
+    const logText = document.createElement('div')
+    logText.innerHTML = text
+    logElem.appendChild(logText)
+}
 
 const styleCell = (elem: HTMLElement): void => {
     elem.style.width = '20px'
@@ -50,7 +59,7 @@ const displayLegend = (ary: number[]): void => {
         row.appendChild(cell)
     }
 
-    output.appendChild(row)
+    graph.appendChild(row)
 }
 
 const displayArray = (ary: number[], start: number, end: number, color: string): void => {
@@ -69,7 +78,7 @@ const displayArray = (ary: number[], start: number, end: number, color: string):
         row.appendChild(cell)
     }
 
-    output.appendChild(row)
+    graph.appendChild(row)
 }
 
 enum FailExits {
@@ -90,7 +99,7 @@ const compare = (target: number, ary: number[], start: number, end: number): num
 
     // Fail Exit Strategy 1: Max iterations is set to O(log(n))
     if (iterCount > maxIterations && exit === FailExits.ologn) {
-        console.log('Exited at O(log(n)')
+        log(`Exited after ${maxIterations} itterations at O(log(n)`)
         displayArray(ary, midIndex, end, red)
         return false
     }
@@ -104,7 +113,7 @@ const compare = (target: number, ary: number[], start: number, end: number): num
 
     // Fail Exit Strategy 2: startIndex = midIndex
     if (start === midIndex && exit === FailExits.nochop) {
-        console.log('Exited at no-chop')
+        log(`Exited after ${maxIterations} itterations at No-Chop`)
         displayArray(ary, midIndex, end, red)
         return false
     }
@@ -127,7 +136,7 @@ const compare = (target: number, ary: number[], start: number, end: number): num
 
 const search = (target: number, ary: number[]): number | boolean => {
     maxIterations = Math.ceil(Math['log2'](ary.length)) + 1
-    console.log(`Max itterations: ${maxIterations} (worst cast scenario)`)
+    log(`Max-itterations: ${maxIterations} (worst cast scenario)`)
     iterCount = 0
 
     const start = 0
@@ -140,7 +149,6 @@ const search = (target: number, ary: number[]): number | boolean => {
     if (typeof foundIndex === 'number') {
         return foundIndex
     }
-
 
     return false
 }
@@ -160,21 +168,21 @@ const setTarget = (newTarget: number): void => {
 }
 
 const start = (): void => {
-    output.innerHTML = ''
+    graph.innerHTML = ''
+    logElem.innerHTML = ''
     displayLegend(legendAry)
 
     const foundIndex = search(target, myAry)
 
     if (foundIndex) {
-        console.log(`The target: ${target} was found at index: ${foundIndex}`)
+        log(`The target: ${target} was found at index: ${foundIndex}`)
     } else {
-        console.log(`The target: ${target} was not found in this array`)
+        log(`The target: ${target} was not found in this array`)
     }
 }
 
-input.addEventListener('change', (event: Event): void => {
+input.addEventListener('click', (event: Event): void => {
     const newTargetValue: number = Number(event.target['value'])
-    console.log(`New target value: ${newTargetValue}`)
     setTarget(newTargetValue)
     start()
 })
