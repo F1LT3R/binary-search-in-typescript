@@ -92,10 +92,10 @@ let maxIterations: number
 
 const compare = (target: number, ary: number[], start: number, end: number): number[] | number | boolean => {
     // Change the index rather than chop the array
-    const range = end - start
-    const midPoint = start + (range / 2)
-    const midIndex = Math.floor(midPoint)
-    const midValue = ary[midIndex]
+    const range: number = end - start
+    const midPoint: number = start + (range / 2)
+    const midIndex: number = Math.floor(midPoint)
+    const midValue: number = ary[midIndex]
 
     // Fail Exit Strategy 1: Max iterations is set to O(log(n))
     if (iterCount > maxIterations && exit === FailExits.ologn) {
