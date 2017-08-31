@@ -13,7 +13,7 @@ This is a quick example of a Binary Search implemented in Typescript.
 
 ### Target Found
 
-![binary-search-typescript-targe-found.png](binary-search-typescript-targe-found.png)
+![binary-search-typescript-target-found.png](binary-search-typescript-target-found.png)
 
 ### Exhausted Array
 
