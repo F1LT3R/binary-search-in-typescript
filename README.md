@@ -9,12 +9,12 @@ This is a quick example of a Binary Search implemented in Typescript.
 
 ### Worst Case Performance
 
-![binary-search-worst-case-performance.png](binary-search-worst-case-performance.png)
+![binary-search-typescript-worst-case-performance.png](binary-search-typescript-worst-case-performance.png)
 
 ### Target Found
 
-![binary-search-target-found.png](binary-search-target-found.png)
+![binary-search-typescript-targe-found.png](binary-search-typescript-targe-found.png)
 
 ### Exhausted Array
 
-![binary-search-no-chop.png](binary-search-no-chop.png)
+![binary-search-typescript-no-chop.png](binary-search-typescript-no-chop.png)
