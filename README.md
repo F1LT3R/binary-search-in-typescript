@@ -1,6 +1,6 @@
 # Binary Search with Typescript
 
-Quick example of a binary search implemented in Typescript.
+This is a quick example of a Binary Search implemented in Typescript.
 
 - Demo: [https://f1lt3r.github.io/binary-search-in-typescript/](https://f1lt3r.github.io/binary-search-in-typescript/)
 - Blog Post: [https://f1lt3r.io/binary-search-with-typescript/](https://f1lt3r.io/binary-search-with-typescript/)
