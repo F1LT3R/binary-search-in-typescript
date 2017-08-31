@@ -113,7 +113,7 @@ const compare = (target: number, ary: number[], start: number, end: number): num
 
     // Fail Exit Strategy 2: startIndex = midIndex
     if (start === midIndex && exit === FailExits.nochop) {
-        log(`Exited after ${maxIterations} itterations at No-Chop`)
+        log(`Exited after ${iterCount} itterations at No-Chop`)
         displayArray(ary, midIndex, end, red)
         return false
     }
