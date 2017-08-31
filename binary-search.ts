@@ -175,9 +175,9 @@ const start = (): void => {
     const foundIndex = search(target, myAry)
 
     if (foundIndex) {
-        log(`The target: ${target} was found at index: ${foundIndex}`)
+        log(`The target: ${target} was found at index: ${foundIndex}, with: ${iterCount} iterations`)
     } else {
-        log(`The target: ${target} was not found in this array`)
+        log(`The target: ${target} was not found in this array, after: ${iterCount} iterations`)
     }
 }
 
